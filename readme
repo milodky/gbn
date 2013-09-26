@@ -1,0 +1,103 @@
+I've lerant the lesson of last programming assignment, so I started early this time. It's a pretty good experience that we can put the GBN protocol in practice, in other words, this programming assignment gave me a chance to closely observe how these protocols we had learnt in class work. Besides, I also learnt that 1) I should follow the FSM given by our testbook, 2) the code style is quite important and 3) how to write an efficient c code with multithreading.
+
+In addition, I also learnt how to change int or double variable into strings, which used to spend a lot of time and I had to debug for a long time since I met a lot of segment fault.
+
+Here's my test, and the parameters are listed as follow:
+
+Window size: 5
+-p is used, and the probability is .3 (only this format is valid, i.e. .x where x is a number, others such as 0.2 or 0.3 would be regarded as invalid argument)
+
+At the transmitter side:
+
+node> abcdefg
+[1355015957.734239] packet0 a sent.
+[1355015957.734270] packet1 b sent.
+[1355015957.734283] packet2 c sent.
+[1355015957.734296] packet3 d sent.
+[1355015957.734313] packet4 e sent.
+[1355015957.734342] ACK0 received, window moves to 1.
+[1355015957.734588] packet5 f sent.
+[1355015957.734779] ACK1 received, window moves to 2.
+[1355015957.734836] packet6 g sent.
+[1355015957.734883] ACK2 received, window moves to 3.
+[1355015957.734942] ACK2 discarded.
+[1355015957.734976] ACK2 received, window moves to 3.
+[1355015957.734989] ACK2 received, window moves to 3.
+[1355015958.234911] packet3 timeout.
+[1355015958.235026] packet3 d sent.
+[1355015958.235035] packet4 e sent.
+[1355015958.235042] packet5 f sent.
+[1355015958.235048] packet6 g sent.
+[1355015958.235140] ACK3 received, window moves to 4.
+[1355015958.235182] ACK4 received, window moves to 5.
+[1355015958.235220] ACK4 received, window moves to 5.
+[1355015958.735238] packet5 timeout.
+[1355015958.735324] packet5 f sent.
+[1355015958.735332] packet6 g sent.
+[1355015958.735373] ACK4 discarded.
+[1355015959.235311] packet5 timeout.
+[1355015959.235431] packet5 f sent.
+[1355015959.235441] packet6 g sent.
+[1355015959.235489] ACK5 received, window moves to 6.
+[1355015959.235539] ACK6 discarded.
+[1355015959.735512] packet6 timeout.
+[1355015959.735622] packet6 g sent.
+[1355015960.235613] packet6 timeout.
+[1355015960.235732] packet6 g sent.
+[1355015960.235782] ACK6 received, window moves to 7.
+
+At this point, the above transmission has been completed. Then I started a new transmission.
+
+node> hijk
+[1355016396.312236] packet7 h sent.
+[1355016396.312313] packet8 i sent.
+[1355016396.312342] packet9 j sent.
+[1355016396.312352] packet10 k sent.
+[1355016396.312474] ACK6 received, window moves to 7.
+[1355016396.312490] ACK6 received, window moves to 7.
+[1355016396.812207] packet7 timeout.
+[1355016396.812329] packet7 h sent.
+[1355016396.812343] packet8 i sent.
+[1355016396.812352] packet9 j sent.
+[1355016396.812360] packet10 k sent.
+[1355016396.812402] ACK7 discarded.
+[1355016396.812408] ACK8 received, window moves to 9.
+[1355016396.812448] ACK8 discarded.
+[1355016397.312432] packet9 timeout.
+[1355016397.312558] packet9 j sent.
+[1355016397.312570] packet10 k sent.
+[1355016397.312619] ACK9 received, window moves to 10.
+[1355016397.312679] ACK10 received, window moves to 11.
+node> 
+
+At the receiver side:
+
+node> [1355015957.734276] ACK0 sent, expecting packet1.
+[1355015957.734325] ACK1 sent, expecting packet2.
+[1355015957.734345] ACK2 sent, expecting packet3.
+[1355015957.734362] packet3 d discarded.
+[1355015957.734374] ACK2 sent, expecting packet3.
+[1355015957.734608] ACK2 sent, expecting packet3.
+[1355015957.734891] ACK2 sent, expecting packet3.
+[1355015958.235116] ACK3 sent, expecting packet4.
+[1355015958.235138] ACK4 sent, expecting packet5.
+[1355015958.235147] packet5 f discarded.
+[1355015958.235153] ACK4 sent, expecting packet5.
+[1355015958.735337] packet5 f discarded.
+[1355015958.735355] ACK4 sent, expecting packet5.
+[1355015959.235443] ACK5 sent, expecting packet6.
+[1355015959.235467] ACK6 sent, expecting packet7.
+[1355015959.735637] packet6 g discarded.
+[1355015960.235750] ACK6 sent, expecting packet7.
+[1355016396.312277] packet7 h discarded.
+[1355016396.312432] ACK6 sent, expecting packet7.
+[1355016396.312462] ACK6 sent, expecting packet7.
+[1355016396.312479] packet10 k discarded.
+[1355016396.812343] ACK7 sent, expecting packet8.
+[1355016396.812367] ACK8 sent, expecting packet9.
+[1355016396.812377] packet9 j discarded.
+[1355016396.812383] ACK8 sent, expecting packet9.
+[1355016397.312572] ACK9 sent, expecting packet10.
+[1355016397.312596] ACK10 sent, expecting packet11.
+
+
